@@ -1,0 +1,25 @@
+{
+    "name": "@aerostack/sdks",
+    "version": "0.1.0",
+    "private": true,
+    "description": "Aerostack SDK monorepo - Multi-language SDK generation",
+    "workspaces": [
+        "packages/*"
+    ],
+    "scripts": {
+        "generate": "./scripts/generate.sh",
+        "sync": "./scripts/sync.sh",
+        "build": "npm run build --workspace=@aerostack/sdk-node && npm run build --workspace=@aerostack/sdk-web && npm run build --workspace=@aerostack/react",
+        "test": "npm test --workspaces",
+        "publish:all": "./scripts/publish.sh"
+    },
+    "devDependencies": {
+        "@types/node": "^20.0.0",
+        "typescript": "^5.3.0",
+        "vitest": "^1.0.0",
+        "openai": "^4.28.0",
+        "dotenv": "^16.4.5",
+        "js-yaml": "^4.1.0",
+        "@types/js-yaml": "^4.0.9"
+    }
+}
