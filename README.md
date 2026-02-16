@@ -22,7 +22,7 @@ import { AerostackProvider } from '@aerostack/react';
 function App() {
   return (
     <AerostackProvider 
-      projectUrl="https://your-project.aerostack.app" 
+      projectUrl="https://your-project.aerostack.dev" 
       apiKey="your-public-api-key"
     >
       <YourComponent />
@@ -88,4 +88,4 @@ function ChatBot() {
 
 ## Documentation
 
-For full documentation, visit [docs.aerostack.ai](https://docs.aerostack.ai/sdk/react).
+For full documentation, visit [docs.aerostack.dev](https://docs.aerostack.dev/sdk/react).
