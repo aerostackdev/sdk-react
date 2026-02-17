@@ -83,8 +83,54 @@ function ChatBot() {
       <button onClick={() => sendMessage("Hello!")}>Say Hi</button>
     </div>
   );
+  );
 }
 ```
+
+## SSR and Backend Integration
+
+### Client-Side Only (SPA)
+This SDK is designed for **client-side React apps**. Hooks like `useAuth()` run in the browser.
+
+### Server-Side Rendering (Next.js, Remix)
+For SSR frameworks, use different approaches for server vs. client:
+
+**Server-side (data fetching, API routes)**:
+```tsx
+// app/api/users/route.ts (Next.js App Router)
+import { SDK } from '@aerostack/node';
+
+export async function GET() {
+  const sdk = new SDK({ apiKeyAuth: process.env.AEROSTACK_API_KEY });
+  const users = await sdk.database.dbQuery({
+    sql: 'SELECT * FROM users'
+  });
+  return Response.json(users);
+}
+```
+
+**Client-side (React components)**:
+```tsx
+'use client'; // Next.js 13+
+import { AerostackProvider, useAuth } from '@aerostack/react';
+
+function ClientComponent() {
+  const { user } = useAuth();
+  return <div>{user?.email}</div>;
+}
+```
+
+### Backend Worker Pattern
+If building Cloudflare Workers that need both client Auth and server bindings:
+```typescript
+import { AerostackClient, AerostackServer } from '@aerostack/sdk';
+
+// Use both SDKs as needed
+const client = new AerostackClient({ projectSlug: "my-project" });
+const server = new AerostackServer(env);
+```
+
+See [`@aerostack/sdk` documentation](../sdk/README.md#backend-wrapper-pattern) for details.
 
 ## Documentation
 
