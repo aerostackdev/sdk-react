@@ -5,6 +5,9 @@ export * from './hooks/useAI.js';
 export * from './hooks/useCache.js';
 
 // Re-export core types and client for convenience
-export type { SDK } from '@aerostack/sdk-web';
-export { AerocallClient } from '@aerostack/sdk-web';
-export type { AerocallConfig } from '@aerostack/sdk-web';
+import { SDK, SDKOptions } from '@aerostack/sdk-web';
+
+export type { SDK };
+export const AerocallClient = SDK;
+export type AerocallClient = SDK;
+export type AerocallConfig = SDKOptions;

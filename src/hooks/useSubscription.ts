@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useAerostack } from '../context.js';
-import { RealtimeSubscriptionOptions } from '@aerostack/sdk-web';
+export interface RealtimeSubscriptionOptions {
+    event?: 'INSERT' | 'UPDATE' | 'DELETE' | '*';
+    filter?: Record<string, any>;
+}
 
 /**
  * Hook to subscribe to Aerostack realtime events

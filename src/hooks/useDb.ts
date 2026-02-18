@@ -10,7 +10,9 @@ export const useDb = () => {
         try {
             setLoading(true);
             setError(null);
-            const result = await sdk.database.dbQuery({ sql, params });
+            const result = await sdk.database.dbQuery({
+                requestBody: { sql, params }
+            });
             return result; // result is already DBQueryResult
         } catch (err) {
             const error = err instanceof Error ? err : new Error('Database query failed');
