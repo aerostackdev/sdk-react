@@ -1,62 +1,65 @@
 {
-    "name": "@aerostack/react",
-    "version": "0.4.0",
-    "author": "Aerostack",
-    "type": "module",
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/aerostackdev/sdks.git",
-        "directory": "packages/react"
-    },
-    "bugs": {
-        "url": "https://github.com/aerostackdev/sdks/issues"
-    },
-    "homepage": "https://docs.aerostack.dev",
-    "tshy": {
-        "exports": {
-            ".": "./src/index.ts",
-            "./package.json": "./package.json"
-        }
-    },
-    "sideEffects": false,
-    "scripts": {
-        "build": "tshy",
-        "lint": "eslint --cache --max-warnings=0 src",
-        "prepublishOnly": "npm run build"
-    },
-    "peerDependencies": {
-        "react": "^18.0.0 || ^19.0.0",
-        "react-dom": "^18.0.0 || ^19.0.0"
-    },
-    "devDependencies": {
-        "@eslint/js": "^9.26.0",
-        "@types/react": "^18.0.0 || ^19.0.0",
-        "@types/react-dom": "^18.0.0 || ^19.0.0",
-        "eslint": "^9.26.0",
-        "globals": "^15.14.0",
-        "react": "^18.3.1",
-        "react-dom": "^18.3.1",
-        "tshy": "^2.0.0",
-        "typescript": "~5.8.3",
-        "typescript-eslint": "^8.26.0"
-    },
-    "dependencies": {
-        "@aerostack/sdk-web": "*"
-    },
+  "name": "@aerostack/react",
+  "version": "0.4.0",
+  "author": "Aerostack",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aerostackdev/sdks.git",
+    "directory": "packages/react"
+  },
+  "bugs": {
+    "url": "https://github.com/aerostackdev/sdks/issues"
+  },
+  "homepage": "https://docs.aerostack.dev",
+  "tshy": {
     "exports": {
-        ".": {
-            "import": {
-                "types": "./dist/esm/index.d.ts",
-                "default": "./dist/esm/index.js"
-            },
-            "require": {
-                "types": "./dist/commonjs/index.d.ts",
-                "default": "./dist/commonjs/index.js"
-            }
-        },
-        "./package.json": "./package.json"
+      ".": "./src/index.ts",
+      "./package.json": "./package.json"
+    }
+  },
+  "sideEffects": false,
+  "scripts": {
+    "build": "tshy",
+    "lint": "eslint --cache --max-warnings=0 src",
+    "prepublishOnly": "npm run build"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.26.0",
+    "@types/react": "^18.0.0 || ^19.0.0",
+    "@types/react-dom": "^18.0.0 || ^19.0.0",
+    "eslint": "^9.26.0",
+    "globals": "^15.14.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "tshy": "^2.0.0",
+    "typescript": "~5.8.3",
+    "typescript-eslint": "^8.26.0"
+  },
+  "dependencies": {
+    "@aerostack/sdk-web": "*"
+  },
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/esm/index.d.ts",
+        "default": "./dist/esm/index.js"
+      },
+      "require": {
+        "types": "./dist/commonjs/index.d.ts",
+        "default": "./dist/commonjs/index.js"
+      }
     },
-    "main": "./dist/commonjs/index.js",
-    "types": "./dist/commonjs/index.d.ts",
-    "module": "./dist/esm/index.js"
+    "./package.json": "./package.json"
+  },
+  "main": "./dist/commonjs/index.js",
+  "types": "./dist/commonjs/index.d.ts",
+  "module": "./dist/esm/index.js",
+  "publishConfig": {
+    "access": "public"
+  }
 }
