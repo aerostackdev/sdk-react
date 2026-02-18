@@ -20,12 +20,16 @@ export const AerostackProvider: React.FC<AerostackProviderProps> = ({
     children,
 }) => {
     const sdk = useMemo(() => {
+        // In web context, we use the hook registration for projectId parity
+        import('@aerostack/sdk-web').then(mod => {
+            // @ts-ignore - the hook logic handles this
+            if (mod.setProjectId) mod.setProjectId(projectId);
+        });
+
         return new SDK({
             serverURL: baseUrl,
-            // In web context, we might not have global security at init
-            // but we set it up for public access via projectId header if needed
         });
-    }, [baseUrl]);
+    }, [baseUrl, projectId]);
 
     const value = useMemo(() => ({
         sdk,
