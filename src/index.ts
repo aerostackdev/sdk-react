@@ -8,6 +8,13 @@ export * from './hooks/useCache.js';
 import { SDK, SDKOptions } from '@aerostack/sdk-web';
 
 export type { SDK };
+export const AerostackClient = SDK;
+export type AerostackClient = SDK;
+export type AerostackConfig = SDKOptions;
+
+/** @deprecated Use AerostackClient instead. */
 export const AerocallClient = SDK;
+/** @deprecated Use AerostackClient instead. */
 export type AerocallClient = SDK;
+/** @deprecated Use AerostackConfig instead. */
 export type AerocallConfig = SDKOptions;
