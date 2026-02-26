@@ -1,8 +1,9 @@
 import React, { createContext, useContext, useMemo } from 'react';
 import { SDK } from '@aerostack/sdk-web';
+import { RealtimeClient } from '@aerostack/sdk-web/sdk/realtime.js';
 
 export interface AerostackContextType {
-    sdk: SDK;
+    sdk: SDK & { realtime?: RealtimeClient };
     projectId: string;
 }
 
@@ -10,12 +11,14 @@ const AerostackContext = createContext<AerostackContextType | null>(null);
 
 export interface AerostackProviderProps {
     projectId: string;
+    apiKey?: string;
     baseUrl?: string;
     children: React.ReactNode;
 }
 
 export const AerostackProvider: React.FC<AerostackProviderProps> = ({
     projectId,
+    apiKey,
     baseUrl = 'https://api.aerostack.ai/v1',
     children,
 }) => {
@@ -26,10 +29,24 @@ export const AerostackProvider: React.FC<AerostackProviderProps> = ({
             if (mod.setProjectId) mod.setProjectId(projectId);
         });
 
-        return new SDK({
+        const client = new SDK({
             serverURL: baseUrl,
+            apiKeyAuth: apiKey,
         });
-    }, [baseUrl, projectId]);
+
+        // Instantiate RealtimeClient and attach it to the SDK instance
+        // so that useSubscription and App code can access 'sdk.realtime'
+        const realtime = new RealtimeClient({
+            baseUrl,
+            projectId,
+            apiKey,
+        });
+
+        // Expose realtime on the SDK instance
+        (client as any).realtime = realtime;
+
+        return client as SDK & { realtime: RealtimeClient };
+    }, [baseUrl, projectId, apiKey]);
 
     const value = useMemo(() => ({
         sdk,
