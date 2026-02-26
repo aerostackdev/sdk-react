@@ -1,6 +1,6 @@
 {
   "name": "@aerostack/sdk-react",
-  "version": "0.6.6",
+  "version": "0.6.7",
   "author": "Aerostack",
   "type": "module",
   "repository": {
@@ -41,7 +41,7 @@
     "typescript-eslint": "^8.26.0"
   },
   "dependencies": {
-    "@aerostack/sdk-web": "^0.6.6"
+    "@aerostack/sdk-web": "^0.6.7"
   },
   "exports": {
     ".": {

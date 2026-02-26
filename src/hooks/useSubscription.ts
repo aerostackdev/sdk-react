@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useAerostack } from '../context.js';
+
 export interface RealtimeSubscriptionOptions {
     event?: 'INSERT' | 'UPDATE' | 'DELETE' | '*';
     filter?: Record<string, any>;
@@ -19,6 +20,9 @@ export function useSubscription<T = any>(
     const [data, setData] = useState<T | null>(null);
     const [error, setError] = useState<Error | null>(null);
     const [loading, setLoading] = useState(true);
+    // Fix A15: Stable reference for options to prevent re-render loops
+    const optionsRef = useRef(options);
+    optionsRef.current = options;
 
     useEffect(() => {
         let isMounted = true;
@@ -30,7 +34,7 @@ export function useSubscription<T = any>(
             return;
         }
 
-        const channel = realtime.channel(topic, options);
+        const channel = realtime.channel(topic, optionsRef.current);
 
         const setup = async () => {
             try {
@@ -54,13 +58,29 @@ export function useSubscription<T = any>(
 
         setup();
 
+        // Fix 1.5: Properly unsubscribe on cleanup
         return () => {
             isMounted = false;
-            // Note: We don't automatically disconnect the global client,
-            // but we could unsubscribe from the channel if needed.
-            // channel.unsubscribe();
+            channel.unsubscribe();
         };
-    }, [sdk, topic, JSON.stringify(options)]);
+    }, [sdk, topic]);
 
     return { data, error, loading };
+}
+
+/**
+ * Hook to observe the realtime connection status
+ */
+export function useRealtimeStatus() {
+    const { sdk } = useAerostack();
+    const realtime = (sdk as any).realtime;
+    const [status, setStatus] = useState<string>(realtime?.status ?? 'idle');
+
+    useEffect(() => {
+        if (!realtime || !realtime.onStatusChange) return;
+        const unsub = realtime.onStatusChange((s: string) => setStatus(s));
+        return unsub;
+    }, [realtime]);
+
+    return status;
 }

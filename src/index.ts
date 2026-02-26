@@ -3,6 +3,7 @@ export * from './hooks/useAuth.js';
 export * from './hooks/useDb.js';
 export * from './hooks/useAI.js';
 export * from './hooks/useCache.js';
+export * from './hooks/useSubscription.js';
 
 // Re-export core types and client for convenience
 import { SDK, SDKOptions } from '@aerostack/sdk-web';
