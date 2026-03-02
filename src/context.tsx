@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useMemo } from 'react';
-import { SDK } from '@aerostack/sdk-web';
-import { RealtimeClient } from '@aerostack/sdk-web/sdk/realtime.js';
+import { SDK, RealtimeClient } from '@aerostack/sdk-web';
 
 export interface AerostackContextType {
     sdk: SDK & { realtime?: RealtimeClient };

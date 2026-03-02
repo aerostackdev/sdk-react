@@ -10,7 +10,9 @@ export const useCache = () => {
         try {
             setLoading(true);
             setError(null);
-            const result = await sdk.cache.cacheGet({ key });
+            // NOTE: cache is a server-side API. Only use this in Next.js server components
+            // or provide an SDK instance initialized with a Secret Key.
+            const result = await (sdk as any).cache.cacheGet({ key });
             return result.value;
         } catch (err) {
             const error = err instanceof Error ? err : new Error('Cache get failed');
@@ -25,7 +27,7 @@ export const useCache = () => {
         try {
             setLoading(true);
             setError(null);
-            await sdk.cache.cacheSet({ key, value, ttl });
+            await (sdk as any).cache.cacheSet({ key, value, ttl });
         } catch (err) {
             const error = err instanceof Error ? err : new Error('Cache set failed');
             setError(error);

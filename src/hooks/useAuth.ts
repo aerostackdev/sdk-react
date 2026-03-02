@@ -32,13 +32,13 @@ export const useAuth = () => {
     }, [refreshUser]);
 
     const signIn = async (credentials: any) => {
-        const result = await sdk.authentication.authSignin(credentials);
+        const result = await sdk.auth.authSignin(credentials);
         // setUser(result.user);
         return result;
     };
 
     const signUp = async (credentials: any) => {
-        const result = await sdk.authentication.authSignup(credentials);
+        const result = await sdk.auth.authSignup(credentials);
         return result;
     };
 
