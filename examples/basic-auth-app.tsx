@@ -12,7 +12,7 @@ export default function App() {
     return (
         <AerostackProvider
             projectSlug="YOUR_PROJECT_SLUG"
-        // baseUrl="https://api.aerostack.ai/v1" // Optional
+        // baseUrl="https://api.aerocall.ai/v1" // Optional
         >
             <AuthDemo />
         </AerostackProvider>
