@@ -4,6 +4,7 @@ import { SDK, RealtimeClient } from '@aerostack/sdk-web';
 export interface AerostackContextType {
     sdk: SDK & { realtime?: RealtimeClient };
     projectId: string;
+    baseUrl: string;
 }
 
 const AerostackContext = createContext<AerostackContextType | null>(null);
@@ -50,7 +51,8 @@ export const AerostackProvider: React.FC<AerostackProviderProps> = ({
     const value = useMemo(() => ({
         sdk,
         projectId,
-    }), [sdk, projectId]);
+        baseUrl,
+    }), [sdk, projectId, baseUrl]);
 
     return (
         <AerostackContext.Provider value={value}>
