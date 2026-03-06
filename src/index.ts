@@ -5,6 +5,9 @@ export * from './hooks/useAI.js';
 export * from './hooks/useCache.js';
 export * from './hooks/useSubscription.js';
 export * from './hooks/useGateway.js';
+export * from './hooks/useChat.js';
+export * from './hooks/useStream.js';
+export * from './hooks/useTokenBalance.js';
 
 // Re-export core types and client for convenience
 import { SDK, SDKOptions } from '@aerostack/sdk-web';
