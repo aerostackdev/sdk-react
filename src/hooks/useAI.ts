@@ -19,7 +19,7 @@ export const useAI = () => {
                 messages,
                 ...options,
             });
-            return result.response;
+            return result.choices?.[0]?.message?.content ?? null;
         } catch (err) {
             const error = err instanceof Error ? err : new Error('AI chat failed');
             setError(error);
