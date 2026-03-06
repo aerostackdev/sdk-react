@@ -8,6 +8,7 @@ export * from './hooks/useGateway.js';
 export * from './hooks/useChat.js';
 export * from './hooks/useStream.js';
 export * from './hooks/useTokenBalance.js';
+export * from './hooks/useVectorSearch.js';
 
 // Re-export core types and client for convenience
 import { SDK, SDKOptions } from '@aerostack/sdk-web';
