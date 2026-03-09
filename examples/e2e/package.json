@@ -1,0 +1,20 @@
+{
+  "name": "@aerostack/react-e2e",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@aerostack/sdk-react": "file:../../",
+    "@aerostack/sdk-web": "file:../../../web"
+  },
+  "devDependencies": {
+    "@testing-library/react": "^16.0.0",
+    "jsdom": "^25.0.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "vitest": "^1.0.0"
+  }
+}
