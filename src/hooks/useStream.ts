@@ -7,7 +7,7 @@
  *
  * ```tsx
  * const { text, tokens, isStreaming, error, start, abort } = useStream({
- *   url: 'https://api.aerocall.ai/api/gateway/my-api/v1/chat/completions',
+ *   url: 'https://api.aerostack.dev/api/gateway/my-api/v1/chat/completions',
  *   headers: { Authorization: 'Bearer ask_live_...' },
  *   body: { messages: [{ role: 'user', content: 'Hello' }], stream: true },
  * });

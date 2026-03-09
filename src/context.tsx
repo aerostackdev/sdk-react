@@ -19,7 +19,7 @@ export interface AerostackProviderProps {
 export const AerostackProvider: React.FC<AerostackProviderProps> = ({
     projectId,
     apiKey,
-    baseUrl = 'https://api.aerocall.ai/v1',
+    baseUrl = 'https://api.aerostack.dev/v1',
     children,
 }) => {
     const sdk = useMemo(() => {
