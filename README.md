@@ -1,6 +1,22 @@
 # @aerostack/react
 
-The official React SDK for Aerostack. Easily integrate authentication, database, AI, and other Aerostack services into your React applications using idiomatic Hooks.
+[![npm version](https://img.shields.io/npm/v/@aerostack/react.svg)](https://www.npmjs.com/package/@aerostack/react)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+
+The official React SDK for Aerostack. Integrate authentication, database, AI, caching, realtime subscriptions, and more into your React apps using idiomatic hooks.
+
+## Features
+
+- **`useAuth`** — Full authentication: sign-in, sign-up, OTP, password reset, email verification, profile management
+- **`useDb`** — Execute SQL queries with loading/error states
+- **`useAI`** — AI chat completions
+- **`useGatewayChat`** — Streaming chat UI with token counting and abort support
+- **`useCache`** — Key-value cache get/set operations
+- **`useSubscription`** — Realtime WebSocket subscriptions for database changes
+- **`useVectorSearch`** — Semantic search: ingest, query, delete, update, configure
+- **`useStream`** — Low-level SSE streaming with custom extractors
+- **`useTokenBalance`** — Gateway token wallet balance
+- **`useRealtimeStatus`** — Monitor WebSocket connection status
 
 ## Installation
 
@@ -12,126 +28,278 @@ yarn add @aerostack/react
 pnpm add @aerostack/react
 ```
 
-## Usage
+### Peer Dependencies
 
-### 1. Wrap your app in `AerostackProvider`
+This package requires React 18+ and `@aerostack/sdk-web`.
+
+## Quick Start
+
+### 1. Wrap Your App in `AerostackProvider`
 
 ```tsx
 import { AerostackProvider } from '@aerostack/react';
 
 function App() {
   return (
-    <AerostackProvider 
-      projectUrl="https://your-project.aerostack.dev" 
+    <AerostackProvider
+      projectUrl="https://your-project.aerostack.dev"
       apiKey="your-public-api-key"
     >
-      <YourComponent />
+      <YourApp />
     </AerostackProvider>
   );
 }
 ```
 
-### 2. Use Hooks
-
-#### Authentication
+### 2. Use Hooks in Your Components
 
 ```tsx
-import { useAuth } from '@aerostack/react';
+import { useAuth, useDb } from '@aerostack/react';
 
-function LoginButton() {
-  const { signIn, user, isLoading } = useAuth();
-
-  if (user) return <div>Welcome, {user.email}</div>;
-
-  return (
-    <button onClick={() => signIn('email', 'password')}>
-      {isLoading ? 'Loading...' : 'Sign In'}
-    </button>
-  );
-}
-```
-
-#### Database
-
-```tsx
-import { useDb } from '@aerostack/react';
-
-function TodoList() {
+function Dashboard() {
+  const { user, signOut } = useAuth();
   const { data: todos, isLoading } = useDb('todos').find();
 
-  if (isLoading) return <div>Loading...</div>;
-
-  return (
-    <ul>
-      {todos.map(todo => <li key={todo.id}>{todo.title}</li>)}
-    </ul>
-  );
-}
-```
-
-#### AI Chat
-
-```tsx
-import { useAI } from '@aerostack/react';
-
-function ChatBot() {
-  const { messages, sendMessage } = useAI('support-agent');
+  if (isLoading) return <p>Loading...</p>;
 
   return (
     <div>
-      {messages.map(m => <div>{m.content}</div>)}
-      <button onClick={() => sendMessage("Hello!")}>Say Hi</button>
+      <p>Welcome, {user?.email}</p>
+      <ul>
+        {todos.map(todo => <li key={todo.id}>{todo.title}</li>)}
+      </ul>
+      <button onClick={signOut}>Sign Out</button>
     </div>
-  );
   );
 }
 ```
 
-## SSR and Backend Integration
+## Hooks Reference
+
+### `useAuth()`
+
+Full-featured authentication hook with session management.
+
+```tsx
+const {
+  user,           // Current user object (or null)
+  isLoading,      // Loading state
+  signIn,         // (email, password) => Promise
+  signUp,         // (email, password, options?) => Promise
+  signOut,        // () => Promise
+  sendOTP,        // (destination, type) => Promise
+  verifyOTP,      // (code, destination) => Promise
+  verifyEmail,    // (token) => Promise
+  requestPasswordReset,  // (email) => Promise
+  resetPassword,         // (token, password) => Promise
+  refreshAccessToken,    // () => Promise
+  refreshUser,           // () => Promise
+  updateProfile,         // (data) => Promise
+  deleteAvatar,          // () => Promise
+} = useAuth();
+```
+
+**Example: Login form**
+
+```tsx
+function LoginForm() {
+  const { signIn, isLoading } = useAuth();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await signIn(email, password);
+    } catch (err) {
+      alert(err.message);
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <input value={email} onChange={e => setEmail(e.target.value)} placeholder="Email" />
+      <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Password" />
+      <button disabled={isLoading}>{isLoading ? 'Signing in...' : 'Sign In'}</button>
+    </form>
+  );
+}
+```
+
+### `useGatewayChat()`
+
+Streaming AI chat with token-by-token rendering.
+
+```tsx
+const {
+  messages,       // Array of chat messages
+  sendMessage,    // (content: string) => void
+  isStreaming,    // Whether a response is currently streaming
+  clearMessages,  // () => void
+  wallet,         // Token balance info
+} = useGatewayChat({ consumerKey: 'your-consumer-key' });
+```
+
+**Example: Chat interface**
+
+```tsx
+function ChatUI() {
+  const { messages, sendMessage, isStreaming } = useGatewayChat({
+    consumerKey: 'ck_...',
+  });
+  const [input, setInput] = useState('');
+
+  return (
+    <div>
+      {messages.map((m, i) => (
+        <div key={i} className={m.role}>{m.content}</div>
+      ))}
+      <input value={input} onChange={e => setInput(e.target.value)} />
+      <button
+        disabled={isStreaming}
+        onClick={() => { sendMessage(input); setInput(''); }}
+      >
+        Send
+      </button>
+    </div>
+  );
+}
+```
+
+### `useSubscription(topic, event, callback)`
+
+Realtime database change subscriptions via WebSocket.
+
+```tsx
+function LiveTodos() {
+  const [todos, setTodos] = useState([]);
+
+  useSubscription('todos', 'INSERT', (payload) => {
+    setTodos(prev => [...prev, payload.new]);
+  });
+
+  useSubscription('todos', 'DELETE', (payload) => {
+    setTodos(prev => prev.filter(t => t.id !== payload.old.id));
+  });
+
+  return <ul>{todos.map(t => <li key={t.id}>{t.title}</li>)}</ul>;
+}
+```
+
+### `useVectorSearch()`
+
+Semantic search operations for RAG and AI-powered search.
+
+```tsx
+const {
+  ingest,       // (content, type, id) => Promise
+  query,        // (query, options?) => Promise<results>
+  remove,       // (id) => Promise
+  deleteByType, // (type) => Promise
+  update,       // (id, content) => Promise
+  listTypes,    // () => Promise<types[]>
+  count,        // (type?) => Promise<number>
+  get,          // (id) => Promise
+  configure,    // (options) => Promise
+} = useVectorSearch();
+```
+
+### `useDb()`
+
+```tsx
+const { data, isLoading, error } = useDb('table_name').find();
+```
+
+### `useCache()`
+
+```tsx
+const { get, set } = useCache();
+const value = await get('my-key');
+await set('my-key', 'my-value', { ttl: 3600 });
+```
+
+### `useRealtimeStatus()`
+
+```tsx
+const status = useRealtimeStatus();
+// 'idle' | 'connecting' | 'connected' | 'reconnecting' | 'disconnected'
+```
+
+## SSR and Framework Integration
 
 ### Client-Side Only (SPA)
-This SDK is designed for **client-side React apps**. Hooks like `useAuth()` run in the browser.
 
-### Server-Side Rendering (Next.js, Remix)
-For SSR frameworks, use different approaches for server vs. client:
+All hooks run in the browser. For SPAs (Create React App, Vite), use directly.
 
-**Server-side (data fetching, API routes)**:
+### Next.js App Router
+
+Use `'use client'` directive for components with Aerostack hooks:
+
 ```tsx
-// app/api/users/route.ts (Next.js App Router)
+// app/layout.tsx (Server Component)
+import { ClientProviders } from './providers';
+
+export default function Layout({ children }) {
+  return <ClientProviders>{children}</ClientProviders>;
+}
+```
+
+```tsx
+// app/providers.tsx (Client Component)
+'use client';
+import { AerostackProvider } from '@aerostack/react';
+
+export function ClientProviders({ children }) {
+  return (
+    <AerostackProvider projectUrl="..." apiKey="...">
+      {children}
+    </AerostackProvider>
+  );
+}
+```
+
+### Server-Side Data Fetching
+
+For server-side API calls (API routes, server components), use the Node SDK:
+
+```tsx
+// app/api/users/route.ts
 import { SDK } from '@aerostack/node';
 
+const sdk = new SDK({ apiKeyAuth: process.env.AEROSTACK_API_KEY });
+
 export async function GET() {
-  const sdk = new SDK({ apiKeyAuth: process.env.AEROSTACK_API_KEY });
-  const users = await sdk.database.dbQuery({
-    sql: 'SELECT * FROM users'
-  });
+  const users = await sdk.database.dbQuery({ sql: 'SELECT * FROM users' });
   return Response.json(users);
 }
 ```
 
-**Client-side (React components)**:
-```tsx
-'use client'; // Next.js 13+
-import { AerostackProvider, useAuth } from '@aerostack/react';
-
-function ClientComponent() {
-  const { user } = useAuth();
-  return <div>{user?.email}</div>;
-}
-```
-
 ### Backend Worker Pattern
-If building Cloudflare Workers that need both client Auth and server bindings:
+
+For Cloudflare Workers that need both client auth and server bindings:
+
 ```typescript
 import { AerostackClient, AerostackServer } from '@aerostack/sdk';
 
-// Use both SDKs as needed
-const client = new AerostackClient({ projectSlug: "my-project" });
+const client = new AerostackClient({ projectSlug: 'my-project' });
 const server = new AerostackServer(env);
 ```
 
-See [`@aerostack/sdk` documentation](../sdk/README.md#backend-wrapper-pattern) for details.
+See [`@aerostack/sdk` documentation](../sdk/README.md) for details.
+
+## Related Packages
+
+| Package | Use Case |
+|---------|----------|
+| [`@aerostack/web`](../web) | Vanilla JS / non-React browser apps |
+| [`@aerostack/node`](../node) | Node.js server-side |
+| [`@aerostack/react-native`](../react-native) | React Native mobile apps |
+| [`@aerostack/sdk`](../sdk) | Cloudflare Workers (server + client) |
 
 ## Documentation
 
 For full documentation, visit [docs.aerostack.dev](https://docs.aerostack.dev/sdk/react).
+
+## License
+
+MIT
