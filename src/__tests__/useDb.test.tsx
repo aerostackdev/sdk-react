@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
-import { useDb } from '../hooks/useDb';
+import { useDb } from '../hooks/useDb.js';
 
 const mockDbQuery = vi.fn();
 

@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
-import { useStream } from '../hooks/useStream';
+import { useStream } from '../hooks/useStream.js';
 
 const mockFetch = vi.fn();
 vi.stubGlobal('fetch', mockFetch);

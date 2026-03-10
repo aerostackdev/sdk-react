@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
-import { useCache } from '../hooks/useCache';
+import { useCache } from '../hooks/useCache.js';
 
 const mockCacheGet = vi.fn();
 const mockCacheSet = vi.fn();

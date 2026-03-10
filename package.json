@@ -16,7 +16,10 @@
     "exports": {
       ".": "./src/index.ts",
       "./package.json": "./package.json"
-    }
+    },
+    "exclude": [
+      "src/__tests__"
+    ]
   },
   "sideEffects": false,
   "scripts": {

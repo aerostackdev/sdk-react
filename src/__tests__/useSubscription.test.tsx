@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook } from '@testing-library/react';
-import { useSubscription, useRealtimeStatus } from '../hooks/useSubscription';
+import { useSubscription, useRealtimeStatus } from '../hooks/useSubscription.js';
 
 const mockChannel = {
     on: vi.fn(),

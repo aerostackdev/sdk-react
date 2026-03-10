@@ -20,7 +20,7 @@ vi.mock('@aerostack/sdk-web', () => {
 });
 
 // NOW import context (which imports from @aerostack/sdk-web)
-const { AerostackProvider, useAerostack } = await import('../context');
+const { AerostackProvider, useAerostack } = await import('../context.js');
 
 describe('useAerostack', () => {
   it('should throw when used outside of AerostackProvider', () => {

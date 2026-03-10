@@ -14,7 +14,7 @@ vi.mock('../context.js', () => ({
 }));
 
 // Import after mocks
-const { useGatewayChat, useGatewayWallet, useGatewayUsage } = await import('../hooks/useGateway');
+const { useGatewayChat, useGatewayWallet, useGatewayUsage } = await import('../hooks/useGateway.js');
 
 function mockFetchResponse(data: any, ok = true, status = 200) {
     mockFetch.mockResolvedValueOnce({
@@ -153,7 +153,7 @@ describe('useGatewayChat', () => {
         );
 
         expect(result.current.messages.length).toBeGreaterThanOrEqual(1);
-        const welcome = result.current.messages.find(m => m.id === 'welcome');
+        const welcome = result.current.messages.find((m: any) => m.id === 'welcome');
         expect(welcome?.content).toBe('Welcome!');
         expect(welcome?.role).toBe('assistant');
     });
@@ -187,7 +187,7 @@ describe('useGatewayChat', () => {
         });
 
         // Should still have welcome message after clear
-        const welcome = result.current.messages.find(m => m.id === 'welcome');
+        const welcome = result.current.messages.find((m: any) => m.id === 'welcome');
         expect(welcome).toBeTruthy();
         expect(result.current.tokensUsedThisSession).toBe(0);
     });

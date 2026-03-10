@@ -13,7 +13,7 @@ vi.mock('../context.js', () => ({
     }),
 }));
 
-const { useTokenBalance } = await import('../hooks/useTokenBalance');
+const { useTokenBalance } = await import('../hooks/useTokenBalance.js');
 
 describe('useTokenBalance', () => {
     beforeEach(() => {

@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
-import { useAI } from '../hooks/useAI';
+import { useAI } from '../hooks/useAI.js';
 
 const mockAiChat = vi.fn();
 

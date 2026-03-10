@@ -2,7 +2,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import React from 'react';
 import { renderHook, act, waitFor } from '@testing-library/react';
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from '../hooks/useAuth.js';
 
 // Mock the context module
 vi.mock('../context.js', () => ({
