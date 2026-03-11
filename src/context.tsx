@@ -13,6 +13,7 @@ export interface AerostackProviderProps {
     projectId: string;
     apiKey?: string;
     baseUrl?: string;
+    maxReconnectAttempts?: number;
     children: React.ReactNode;
 }
 
@@ -20,6 +21,7 @@ export const AerostackProvider: React.FC<AerostackProviderProps> = ({
     projectId,
     apiKey,
     baseUrl = 'https://api.aerostack.dev/v1',
+    maxReconnectAttempts = 10,
     children,
 }) => {
     const sdk = useMemo(() => {
@@ -40,6 +42,7 @@ export const AerostackProvider: React.FC<AerostackProviderProps> = ({
             baseUrl,
             projectId,
             apiKey,
+            maxReconnectAttempts,
         });
 
         // Expose realtime on the SDK instance
